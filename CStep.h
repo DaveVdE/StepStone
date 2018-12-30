@@ -1,7 +1,5 @@
 #pragma once
 
-#include <Arduino.h>
-
 // Represents a step in a lane. At this time, the step only signifies whether it should trigger or not.
 class CStep 
 {

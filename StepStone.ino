@@ -1,23 +1,16 @@
-#include <Adafruit_NeoPixel.h>
-#include <Adafruit_NeoTrellisM4.h>
 #include "MIDIUSB.h"
+#include "CSequencer.h"
+#include "CGrid.h"
 
-#define PIN 10
-
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(32, PIN, NEO_GRB + NEO_KHZ800);
-Adafruit_NeoTrellisM4 trellis = Adafruit_NeoTrellisM4();
-
+CSequencer sequencer;
+CGrid grid(sequencer);
 
 void setup() {
-  strip.begin();
-  strip.show();
-  strip.setBrightness(31);
-  //trellis.enableUSBMIDI(true); 
+  grid.Initialize();
 }
 
-uint32_t counter = 0;
-
-void loop() {
+void HandleMIDIInput() 
+{
   midiEventPacket_t rx;
 
   do 
@@ -26,23 +19,17 @@ void loop() {
 
       if (rx.byte1 == 0xFA)
       {
-        counter = 0;
+        sequencer.Start();
       }
 
       if (rx.byte1 == 0xF8)
       {
-        if (counter % 24 == 0)
-        {
-          strip.setPixelColor(0, strip.Color(255, 255, 255));
-        }
-        else {
-          strip.setPixelColor(0, 0);
-        }
-
-        strip.show();
-
-        ++counter;
+        sequencer.HandlePulse();
+        grid.Render();
       }
   }
   while (rx.header != 0);
+}
+void loop() {
+  HandleMIDIInput();
 }
