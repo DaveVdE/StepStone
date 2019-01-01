@@ -6,30 +6,39 @@ CSequencer sequencer;
 CGrid grid(sequencer);
 
 void setup() {
-  grid.Initialize();
+  grid.initialize();
 }
 
-void HandleMIDIInput() 
+#define MIDI_CLOCK 0xF8
+#define MIDI_START 0xFA
+#define MIDI_STOP 0xFC
+
+void handleMIDIInput() 
 {
   midiEventPacket_t rx;
 
-  do 
+  while ((rx = MidiUSB.read()).byte1 != 0)
   {
-      rx = MidiUSB.read();
-
-      if (rx.byte1 == 0xFA)
+      switch (rx.byte1)
       {
-        sequencer.Start();
-      }
+        case MIDI_START:
+          sequencer.start();
+          grid.render();
+          break;
 
-      if (rx.byte1 == 0xF8)
-      {
-        sequencer.HandlePulse();
-        grid.Render();
+        case MIDI_STOP:
+          sequencer.stop();
+          grid.render();
+          break;
+
+        case MIDI_CLOCK:
+          sequencer.handlePulse();
+          grid.render();
+          break;
       }
   }
-  while (rx.header != 0);
 }
+
 void loop() {
-  HandleMIDIInput();
+  handleMIDIInput();
 }

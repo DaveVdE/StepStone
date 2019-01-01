@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CGRID_INCLUDED
+#define CGRID_INCLUDED
 
 #include <Adafruit_NeoPixel.h>
 #include "CSequencer.h"
@@ -19,22 +20,22 @@ class CGrid
         {
         }
 
-        void Initialize()
+        void initialize()
         {
             _strip.begin();
             _strip.show();
             _strip.setBrightness(31);
         }
 
-        void Render()
+        void render()
         {
             auto on = _strip.Color(255, 255, 255);
             auto off = _strip.Color(0, 0, 0);
-            auto position = _sequencer.GetPosition();
+            auto position = _sequencer.position();
 
             for (uint8_t row = 0; row < GridRows; ++row)
             {
-                auto lane = _sequencer.GetZone(0)->GetLane(row);
+                auto lane = _sequencer.zone(0)->lane(row);
                 auto index = lane->CalculateStepIndex(position);
                 auto offset = row * GridColumns;
 
@@ -56,3 +57,5 @@ class CGrid
             _strip.show();
         }
 };
+
+#endif

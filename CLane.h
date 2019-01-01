@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CLANE_INCLUDED
+#define CLANE_INCLUDED
 
 #include <Arduino.h>
 #include "CStep.h"
@@ -23,6 +24,36 @@ class CLane
         {
         }
 
+        uint8_t laneLength() const
+        {
+            return _laneLength;
+        }
+
+        void laneLength(uint8_t laneLength)
+        {
+            _laneLength = laneLength;
+        }
+
+        uint8_t stepLength() const
+        {
+            return _stepLength;
+        }
+
+        void stepLength(uint8_t stepLength) 
+        {
+            _stepLength = stepLength;
+        }
+
+        uint8_t noteNumber() const
+        {
+            return _noteNumber;
+        }
+
+        void noteNumber(uint8_t noteNumber)
+        {
+            _noteNumber = noteNumber;
+        }
+
         // Calculate step index based on pulse
         uint8_t CalculateStepIndex(uint32_t position) const
         {
@@ -30,7 +61,7 @@ class CLane
         }
 
         // Fetches the step at the given pulse. If no step is present at this pulse, NULL is returned.
-        CStep* FetchStepAtPulse(uint32_t pulse) 
+        CStep* getStepAtPosition(uint32_t pulse) 
         {
             uint8_t pulseInLane = pulse % (_laneLength * _stepLength);
 
@@ -43,33 +74,6 @@ class CLane
             return NULL;
         }
 
-        uint8_t LaneLength() 
-        {
-            return _laneLength;
-        }
-
-        void LaneLength(uint8_t laneLength)
-        {
-            _laneLength = laneLength;
-        }
-
-        uint8_t StepLength()
-        {
-            return _stepLength;
-        }
-
-        void StepLength(uint8_t stepLength) 
-        {
-            _stepLength = stepLength;
-        }
-
-        uint8_t NoteNumber() 
-        {
-            return _noteNumber;
-        }
-
-        void NoteNumber(uint8_t noteNumber)
-        {
-            _noteNumber = noteNumber;
-        }
 };
+
+#endif

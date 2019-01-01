@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CZONE_INCLUDED
+#define CZONE_INCLUDED
 
 #include "CLane.h"
 
@@ -19,7 +20,7 @@ class CZone
         //     _lanes[3].LaneLength(2);
         // }
 
-        const CLane* GetLane(uint8_t index) const
+        const CLane* lane(uint8_t index) const
         {
             if (index < NumberOfLanes) 
             {
@@ -29,3 +30,5 @@ class CZone
             return NULL;
         }
 };
+
+#endif

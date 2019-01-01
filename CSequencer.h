@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CSEQUENCER_INCLUDED
+#define CSEQUENCER_INCLUDED
 
 #include "CZone.h"
 
@@ -12,7 +13,7 @@ class CSequencer
         bool _running;
 
     public:
-        const CZone* GetZone(uint8_t index) const
+        const CZone* zone(uint8_t index) const
         {
             if (index < NumberOfZones)
             {
@@ -22,24 +23,31 @@ class CSequencer
             return NULL;
         }
 
-        void Start() 
+        uint32_t position() const
+        {
+            return _position;
+        }
+
+        bool running() const
+        {
+            return _running;
+        }
+
+        void start() 
         {
             _running = true;
             _position = 0;
         }
 
-        void Stop()
+        void stop()
         {
             _running = false;
         }
 
-        void HandlePulse()
+        void handlePulse()
         {
             if (_running) ++_position;
         }
-
-        uint32_t GetPosition() const
-        {
-            return _position;
-        }
 };
+
+#endif
